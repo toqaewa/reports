@@ -27,6 +27,7 @@ const QuarterlyReport: React.FC = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [searchValue, setSearchValue] = useState(''); // для дебаунса
 
   const handleOnDrop = (results: any) => {
     const rawData: string[][] = results.data;
@@ -50,11 +51,35 @@ const QuarterlyReport: React.FC = () => {
     const firstRow = data[0];
     return Object.keys(firstRow).map((key) => ({
       accessorKey: key,
-      header: key,
-      cell: (info) => info.getValue(),
+      header: ({ column }) => (
+        <div>
+          <div>{key}</div>
+          <input
+            placeholder={`Filter ${key}`}
+            value={(column.getFilterValue() as string) ?? ''}
+            onChange={e => column.setFilterValue(e.target.value)}
+            style={{
+              marginTop: '4px',
+              padding: '4px',
+              width: '-webkit-fill-available',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+            }}
+          />
+        </div>
+      ),
+      cell: (info) => {
+        const value = String(info.getValue());
+        return highlightMatches(value, globalFilter);
+      },
       minSize: 100,
+
+      filterFn: (row, columnId, filterValue) => {
+        const value = String(row.getValue(columnId));
+        return value.toLowerCase().includes(filterValue.toLowerCase());
+      }
     }));
-  }, [data]);
+  }, [data, globalFilter]);
 
   const table = useReactTable({
     data,
@@ -96,6 +121,15 @@ const QuarterlyReport: React.FC = () => {
   const paddingBottom = virtualRows.length > 0 
     ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) 
     : 0;
+
+  // дебаунс для поиска
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setGlobalFilter(searchValue);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, [searchValue]);
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -104,6 +138,22 @@ const QuarterlyReport: React.FC = () => {
 
   const handleClearSearch = () => {
     setGlobalFilter('');
+  };
+
+  // подсветка совпадений по поиску
+  const highlightMatches = (value: string, search: string) => {
+    if (!search) return value;
+    
+    const parts = value.split(new RegExp(`(${search})`, 'gi'));
+    return (
+      <span>
+        {parts.map((part, i) => 
+          part.toLowerCase() === search.toLowerCase() ? 
+            <mark key={i} style={{ backgroundColor: '#ffeb3b', padding: '0 2px' }}>{part}</mark> : 
+            part
+        )}
+      </span>
+    );
   };
 
   const taskTypeStats = useMemo((): ChartData[] => {
