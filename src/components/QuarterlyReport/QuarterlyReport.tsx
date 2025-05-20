@@ -2,13 +2,14 @@ import React from 'react';
 import { useTaskData } from '../../hooks/useTaskData';
 import { useSearch } from '../../hooks/useSearch';
 import { CSVUploader } from './CSVUploader';
-import { TaskTypeChart } from './TaskTypeChart';
-import { EstimateChart } from './EstimateChart';
+import { TaskTypeChart } from '../Charts/TaskTypeChart';
+import { EstimateChart } from '../Charts/EstimateChart';
+import { TaskAssigneeChart } from '../Charts/TaskAssigneeChart';
 import { DataTable } from './DataTable';
 import { SearchInput } from './SearchInput';
 
 export const QuarterlyReport: React.FC = () => {
-  const { data, taskTypeStats, estimateStats, handleOnDrop } = useTaskData();
+  const { data, taskTypeStats, estimateStats, taskAssigneeStats, handleOnDrop } = useTaskData();
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
   return (
@@ -24,6 +25,7 @@ export const QuarterlyReport: React.FC = () => {
           <div className="charts-section" style={{ marginBottom: '50px' }}>
             <TaskTypeChart data={taskTypeStats} />
             <EstimateChart data={estimateStats} />
+            <TaskAssigneeChart data={taskAssigneeStats} />
           </div>
           
           <div className="table-section">

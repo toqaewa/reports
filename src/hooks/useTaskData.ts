@@ -57,10 +57,28 @@ export const useTaskData = () => {
     }, [] as ChartData[]);
   }, [data]);
 
+  const taskAssigneeStats = useMemo((): ChartData[] => {
+    if (!data.length) return [];
+    
+    const assigneeCounts = data.reduce((acc, task) => {
+      const type = task['Assignee']?.trim();
+      if (!type || type === 'Unknown') return acc;
+      
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(assigneeCounts).map(([type, count]) => ({
+      type,
+      count
+    }));
+  }, [data]);
+
   return {
     data,
     taskTypeStats,
     estimateStats,
+    taskAssigneeStats,
     handleOnDrop,
     setData
   };
