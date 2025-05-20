@@ -138,6 +138,7 @@ const QuarterlyReport: React.FC = () => {
 
   const handleClearSearch = () => {
     setGlobalFilter('');
+    setSearchValue('');
   };
 
   // подсветка совпадений по поиску
