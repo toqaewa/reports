@@ -7,9 +7,10 @@ import { EstimateChart } from '../Charts/EstimateChart';
 import { TaskAssigneeChart } from '../Charts/TaskAssigneeChart';
 import { DataTable } from './DataTable';
 import { SearchInput } from './SearchInput';
+import { TaskReporterChart } from '../Charts/TaskReporterChart';
 
 export const QuarterlyReport: React.FC = () => {
-  const { data, taskTypeStats, estimateStats, taskAssigneeStats, handleOnDrop } = useTaskData();
+  const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, handleOnDrop } = useTaskData();
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
   return (
@@ -26,6 +27,7 @@ export const QuarterlyReport: React.FC = () => {
             <TaskTypeChart data={taskTypeStats} />
             <EstimateChart data={estimateStats} />
             <TaskAssigneeChart data={taskAssigneeStats} />
+            <TaskReporterChart data={taskReporterStats} />
           </div>
           
           <div className="table-section">

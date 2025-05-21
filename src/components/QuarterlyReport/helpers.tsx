@@ -1,3 +1,5 @@
+// эту штуку зря вынесла отдельно, если больше ничего не буду масштабировать - надо удалить
+
 export const highlightMatches = (value: string, search: string) => {
     if (!search) return value;
     

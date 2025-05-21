@@ -74,11 +74,29 @@ export const useTaskData = () => {
     }));
   }, [data]);
 
+  const taskReporterStats = useMemo((): ChartData[] => {
+    if (!data.length) return [];
+    
+    const reporterCounts = data.reduce((acc, task) => {
+      const type = task['Reporter']?.trim();
+      if (!type || type === 'Unknown') return acc;
+      
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(reporterCounts).map(([type, count]) => ({
+      type,
+      count
+    }));
+  }, [data]);
+
   return {
     data,
     taskTypeStats,
     estimateStats,
     taskAssigneeStats,
+    taskReporterStats,
     handleOnDrop,
     setData
   };
