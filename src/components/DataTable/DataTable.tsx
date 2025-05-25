@@ -12,6 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTableConfig } from '../../hooks/useTableConfig';
+import './DataTable.css'
 
 interface DataTableProps {
   data: Record<string, string>[];
@@ -68,39 +69,16 @@ export const DataTable: React.FC<DataTableProps> = ({ data, globalFilter }) => {
   return (
     <div 
       ref={tableContainerRef}
-      style={{ 
-        height: '600px',
-        overflow: 'auto',
-        border: '1px solid #ddd',
-        borderRadius: '4px',
-        position: 'relative'
-      }}
+      className='table-container'
     >
-      <table style={{ 
-        width: '100%',
-        borderCollapse: 'separate',
-        borderSpacing: 0,
-        position: 'relative'
-      }}>
-        <thead style={{ 
-          background: '#f5f5f5',
-          position: 'sticky',
-          top: 0,
-          zIndex: 1
-        }}>
+      <table>
+        <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th
                   key={header.id}
-                  style={{
-                    padding: '12px',
-                    textAlign: 'left',
-                    borderBottom: '1px solid #ddd',
-                    position: 'relative',
-                    minWidth: header.getSize(),
-                    background: '#f5f5f5'
-                  }}
+                  style={{ minWidth: header.getSize() }}
                 >
                   {flexRender(header.column.columnDef.header, header.getContext())}
                   <div
@@ -112,7 +90,8 @@ export const DataTable: React.FC<DataTableProps> = ({ data, globalFilter }) => {
                       top: 0,
                       height: '100%',
                       width: '4px',
-                      background: header.column.getIsResizing() ? 'blue' : 'transparent',
+                      borderRadius: '2px',
+                      background: header.column.getIsResizing() ? '#71483B' : 'transparent',
                       cursor: 'col-resize',
                     }}
                   />
@@ -130,14 +109,10 @@ export const DataTable: React.FC<DataTableProps> = ({ data, globalFilter }) => {
           {virtualRows.map(virtualRow => {
             const row = rows[virtualRow.index];
             return (
-              <tr key={row.id} style={{ borderBottom: '1px solid #eee' }}>
+              <tr key={row.id} className='table-row'>
                 {row.getVisibleCells().map(cell => (
                   <td
                     key={cell.id}
-                    style={{
-                      padding: '12px',
-                      borderBottom: '1px solid #eee',
-                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

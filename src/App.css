@@ -1,38 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap");
+
 .App {
-  text-align: center;
+  font-family: Jura;
+  font-size: 12px;
+  color: #777677;
+  background-color: #12141b;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  color: #DCD8D3;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h2 {
+  color: #DCD8D3;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  margin: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h3 {
+  color: #DCD8D3;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  margin: 0;
 }
 
-.App-link {
-  color: #61dafb;
+h4 {
+  color: #DCD8D3;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button:hover {
+  opacity: 0.6;
+}
+
+input {
+  background: none;
+  border: none;
+  width: -webkit-fill-available;
+  font-family: Jura;
+  color: #777677;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+input:hover {
+  color: #71483B;
+}
+
+input:hover::placeholder {
+  color: #71483B;
+}
+
+input:focus-visible{
+  color: #CF7B5A;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+input:focus-visible::placeholder{
+  color: #CF7B5A;
 }

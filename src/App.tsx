@@ -1,8 +1,12 @@
+import "./App.css"
+
 import QuarterlyReport from './components/QuarterlyReport/QuarterlyReport';
 
 const App = () => {
   return (
-    <QuarterlyReport />
+    <div className="App">
+      <QuarterlyReport />
+    </div>
   );
 };
 

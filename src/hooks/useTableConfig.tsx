@@ -12,18 +12,10 @@ export const useTableConfig = (data: TaskData[], globalFilter: string) => {
       accessorKey: key,
       header: ({ column }) => (
         <div>
-          <div>{key}</div>
           <input
-            placeholder={`Filter ${key}`}
+            placeholder={key}
             value={(column.getFilterValue() as string) ?? ''}
             onChange={e => column.setFilterValue(e.target.value)}
-            style={{
-              marginTop: '4px',
-              padding: '4px',
-              width: '-webkit-fill-available',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-            }}
           />
         </div>
       ),
@@ -48,7 +40,7 @@ export const useTableConfig = (data: TaskData[], globalFilter: string) => {
       <span>
         {parts.map((part, i) => 
           part.toLowerCase() === search.toLowerCase() ? 
-            <mark key={i} style={{ backgroundColor: '#ffeb3b', padding: '0 2px' }}>{part}</mark> : 
+            <mark key={i} style={{ backgroundColor: '#CF7B5A40', color: '#CF7B5A', padding: '0 2px' }}>{part}</mark> : 
             part
         )}
       </span>

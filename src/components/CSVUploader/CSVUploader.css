@@ -1,0 +1,27 @@
+.csv-uploader {
+    display: flex;
+    flex-direction: column;
+    margin: 24px;
+    gap: 16px;
+}
+
+.drag-area {
+    border: 1px dashed #3A3B40;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.drag-area:hover {
+    border-color: #71483B;
+    color: #CF7B5A;
+    background-color: #382928;
+}
+
+.accepted-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

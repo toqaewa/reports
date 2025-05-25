@@ -1,0 +1,65 @@
+.input-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+.input-icon {
+    position: absolute;
+    left: 8px;
+    top: 25%;
+    color: #777677;
+}
+
+.input-container:hover .input-icon {
+    color: #71483B;
+}
+
+.input-container:focus-within .input-icon {
+    color: #cf7b5a;
+}
+
+.input-field {
+    width: 100%;
+    padding: 20px 8px 12px 40px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    font-size: 16px;
+    outline: none;
+    background: #181a21;
+    color: #dcd8d3;
+    font-family: Jura;
+}
+
+.placeholder-label {
+    position: absolute;
+    left: 36px;
+    top: 25%;
+    color: #777677;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.placeholder-label.focused {
+    top: 4px;
+    left: 36px;
+    font-size: 12px;
+    line-height: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 16px;
+}
+
+.input-field:hover {
+    box-shadow: 0px -4px 12px -2px rgba(207, 123, 90, 0.25) inset;
+}
+
+.input-field:focus {
+    border-color: #71483B;
+}
