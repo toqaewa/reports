@@ -1,3 +1,5 @@
+@import url('../../index.css');
+
 .csv-uploader {
     display: flex;
     flex-direction: column;
@@ -6,7 +8,7 @@
 }
 
 .drag-area {
-    border: 1px dashed #3A3B40;
+    border: 1px dashed var(--caption-color);
     border-radius: 8px;
     padding: 20px;
     text-align: center;
@@ -15,9 +17,9 @@
 }
 
 .drag-area:hover {
-    border-color: #71483B;
-    color: #CF7B5A;
-    background-color: #382928;
+    border-color: var(--secondary-color);
+    color: var(--primary-color);
+    background-color: var(--tertiary-color);
 }
 
 .accepted-file {

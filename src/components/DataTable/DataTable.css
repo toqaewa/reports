@@ -1,3 +1,5 @@
+@import url('../../index.css');
+
 .table-container {
     height: 640px;
     overflow: auto;
@@ -15,7 +17,7 @@ thead {
     position: sticky;
     top: 0;
     z-index: 1;
-    background-color: #12141B;
+    background-color: var(--bg-color);
 }
 
 th {
@@ -25,11 +27,11 @@ th {
 }
 
 .table-row td {
-    background-color: #181A21;
+    background-color: var(--card-color);
     padding: 12px;
-    color: #DCD8D3;
+    color: var(--title-color);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .table-row td:first-child {

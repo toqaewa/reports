@@ -1,4 +1,5 @@
 import React from 'react';
+import "../../index.css";
 import "./Chart.css"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import CustomTooltip from './CustomTooltip';
@@ -17,14 +18,9 @@ export const EstimateChart: React.FC<EstimateChartProps> = ({ data }) => (
         <YAxis />
         <Tooltip 
           content={<CustomTooltip />}
-          cursor={{
-            fill: "#CF7B5A",
-            fillOpacity: 0.1,
-          }} 
         />
         <Bar 
           dataKey="estimate" 
-          fill="#CF7B5A" 
           name="Estimate"
           radius={[4, 4, 0, 0]}
         />

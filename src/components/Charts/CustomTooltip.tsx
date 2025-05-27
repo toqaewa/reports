@@ -12,7 +12,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
           <div style={{display: "flex", flexDirection: "column", gap: 8}}>
             {payload.map((pld) => (
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", flexDirection: "row", gap: "8px", width: 120 }}>
+                  <div style={{ display: "flex", flexDirection: "row", gap: "8px", width: 140 }}>
                     <div style={{ color: pld.color, width: "100%" }}>{label} {pld.dataKey}</div>
                     <h4>{pld.value}</h4>
                   </div>

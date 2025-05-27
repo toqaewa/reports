@@ -1,14 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap");
+@import url('./index.css');
 
 .App {
-  font-family: Jura;
+  font-family: 'Open Sans';
   font-size: 12px;
-  color: #777677;
-  background-color: #12141b;
+  color: var(--text-color);
+  background-color: var(--bg-color);
 }
 
 h1 {
-  color: #DCD8D3;
+  color: var(--title-color);
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -16,7 +16,7 @@ h1 {
 }
 
 h2 {
-  color: #DCD8D3;
+  color: var(--title-color);
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -24,7 +24,7 @@ h2 {
 }
 
 h3 {
-  color: #DCD8D3;
+  color: var(--title-color);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -32,7 +32,7 @@ h3 {
 }
 
 h4 {
-  color: #DCD8D3;
+  color: var(--title-color);
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
@@ -47,27 +47,27 @@ input {
   background: none;
   border: none;
   width: -webkit-fill-available;
-  font-family: Jura;
-  color: #777677;
+  font-family: 'Open Sans';
+  color: var(--text-color);
   font-size: 14px;
   font-weight: 400;
 }
 
 input:hover {
-  color: #71483B;
+  color: var(--secondary-color);
 }
 
 input:hover::placeholder {
-  color: #71483B;
+  color: var(--secondary-color);
 }
 
 input:focus-visible{
-  color: #CF7B5A;
+  color: var(--primary-color);
   background: none;
   border: none;
   outline: none;
 }
 
 input:focus-visible::placeholder{
-  color: #CF7B5A;
+  color: var(--primary-color);
 }

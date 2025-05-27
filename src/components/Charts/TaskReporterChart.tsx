@@ -17,14 +17,9 @@ export const TaskReporterChart: React.FC<TaskReporterChartProps> = ({ data }) =>
         <YAxis />
         <Tooltip 
           content={<CustomTooltip />}
-          cursor={{
-            fill: "#CF7B5A",
-            fillOpacity: 0.1,
-          }} 
         />
         <Bar 
           dataKey="count" 
-          fill="#CF7B5A" 
           name="Количество задач"
           radius={[4, 4, 0, 0]}
         />
