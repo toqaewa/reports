@@ -1,10 +1,38 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 type TaskData = Record<string, string>;
 type ChartData = { type: string; count?: number; estimate?: number };
 
+const STORAGE_KEY = 'quarterlyReportData';
+
+const compressData = (data: TaskData[]): TaskData[] => {
+  return data.map(task => {
+    const compressedTask: TaskData = {};
+    if (task['Issue Type']) compressedTask['Issue Type'] = task['Issue Type'];
+    if (task['Original estimate']) compressedTask['Original estimate'] = task['Original estimate'];
+    if (task['Assignee']) compressedTask['Assignee'] = task['Assignee'];
+    if (task['Reporter']) compressedTask['Reporter'] = task['Reporter'];
+    // подумать что еще может быть нужно для отчетов
+    return compressedTask;
+  });
+};
+
 export const useTaskData = () => {
   const [data, setData] = useState<TaskData[]>([]);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        if (Array.isArray(parsedData) && parsedData.length > 0) {
+          setData(parsedData);
+        }
+      } catch (e) {
+        console.error('Failed to parse saved data', e);
+      }
+    }
+  }, []);
 
   const handleOnDrop = (results: any) => {
     const rawData: string[][] = results.data;
@@ -17,7 +45,20 @@ export const useTaskData = () => {
       }, {} as TaskData);
     });
     
+    const compressedData = compressData(formattedData);
     setData(formattedData);
+    
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData));
+    } catch (e) {
+      console.error('Failed to save data to localStorage', e);
+      // добавить fallback - сохранение первых N записей
+    }
+  };
+
+  const clearData = () => {
+    setData([]);
+    localStorage.removeItem(STORAGE_KEY);
   };
 
   const taskTypeStats = useMemo((): ChartData[] => {
@@ -98,6 +139,7 @@ export const useTaskData = () => {
     taskAssigneeStats,
     taskReporterStats,
     handleOnDrop,
-    setData
+    setData,
+    clearData,
   };
 };
