@@ -46,7 +46,6 @@ export const useTaskData = () => {
     });
     
     const compressedData = compressData(formattedData);
-    setData(formattedData);
     
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData));
@@ -54,6 +53,8 @@ export const useTaskData = () => {
       console.error('Failed to save data to localStorage', e);
       // добавить fallback - сохранение первых N записей
     }
+
+    setData(compressedData);
   };
 
   const clearData = () => {
