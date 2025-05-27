@@ -8,10 +8,12 @@ const STORAGE_KEY = 'quarterlyReportData';
 const compressData = (data: TaskData[]): TaskData[] => {
   return data.map(task => {
     const compressedTask: TaskData = {};
-    if (task['Issue Type']) compressedTask['Issue Type'] = task['Issue Type'];
-    if (task['Original estimate']) compressedTask['Original estimate'] = task['Original estimate'];
+    if (task['Summary']) compressedTask['Summary'] = task['Summary'];
     if (task['Assignee']) compressedTask['Assignee'] = task['Assignee'];
     if (task['Reporter']) compressedTask['Reporter'] = task['Reporter'];
+    if (task['Priority']) compressedTask['Priority'] = task['Priority'];
+    if (task['Original estimate']) compressedTask['Estimate'] = task['Original estimate'];
+    if (task['Issue Type']) compressedTask['Issue Type'] = task['Issue Type'];
     // подумать что еще может быть нужно для отчетов
     return compressedTask;
   });
@@ -46,7 +48,7 @@ export const useTaskData = () => {
     });
     
     const compressedData = compressData(formattedData);
-    
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData));
     } catch (e) {
