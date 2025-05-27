@@ -17,11 +17,13 @@ export const TaskAssigneeChart: React.FC<TaskAssigneeChartProps> = ({ data }) =>
         <YAxis />
         <Tooltip 
           content={<CustomTooltip />}
+          cursor={false}
         />
         <Bar 
           dataKey="count" 
           name="Количество задач"
           radius={[4, 4, 0, 0]}
+          activeBar={{ fillOpacity: 0.8 }}
         />
       </BarChart>
     </ResponsiveContainer>

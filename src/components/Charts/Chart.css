@@ -12,7 +12,7 @@
 
 .chart-container .recharts-bar-rectangle {
     fill: var(--primary-color);
-  }
+}
 
 .custom-tooltip {
     display: inline-flex;

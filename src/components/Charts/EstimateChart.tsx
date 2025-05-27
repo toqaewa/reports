@@ -18,11 +18,13 @@ export const EstimateChart: React.FC<EstimateChartProps> = ({ data }) => (
         <YAxis />
         <Tooltip 
           content={<CustomTooltip />}
+          cursor={false}
         />
         <Bar 
           dataKey="estimate" 
           name="Estimate"
           radius={[4, 4, 0, 0]}
+          activeBar={{ fillOpacity: 0.8 }}
         />
       </BarChart>
     </ResponsiveContainer>
