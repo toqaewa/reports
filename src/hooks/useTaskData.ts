@@ -1,20 +1,42 @@
 import { useState, useMemo, useEffect } from 'react';
 
-type TaskData = Record<string, string>;
+type TaskData = Record<string, string> & {
+  mergedLabels?: string;
+};
+
 type ChartData = { type: string; count?: number; estimate?: number };
 
 const STORAGE_KEY = 'quarterlyReportData';
 
-const compressData = (data: TaskData[]): TaskData[] => {
+// в экспорте jira каждый лейбл - это отдельное поле, кол-во полей - это самое большое кол-во лейблов в задаче, так что мержу в 1 поле
+const mergeTaskLabels = (task: TaskData, headers: string[]): string => {
+  const labelIndices = headers
+    .map((header, index) => header === 'Labels' ? index : -1)
+    .filter(index => index !== -1);
+
+  const allLabels = labelIndices
+    .flatMap(index => {
+      const value = task[`col_${index}`];
+      if (!value || value.trim() === '') return [];
+      return value.split(',').map(label => label.trim()).filter(Boolean);
+    })
+    .filter((label, index, self) => self.indexOf(label) === index);
+
+  return allLabels.join(', ');
+};
+
+const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
   return data.map(task => {
-    const compressedTask: TaskData = {};
-    if (task['Summary']) compressedTask['Summary'] = task['Summary'];
-    if (task['Assignee']) compressedTask['Assignee'] = task['Assignee'];
-    if (task['Reporter']) compressedTask['Reporter'] = task['Reporter'];
-    if (task['Priority']) compressedTask['Priority'] = task['Priority'];
-    if (task['Original estimate']) compressedTask['Estimate'] = task['Original estimate'];
-    if (task['Issue Type']) compressedTask['Issue Type'] = task['Issue Type'];
-    // подумать что еще может быть нужно для отчетов
+    const compressedTask: TaskData = {
+      'Summary': task['Summary'],
+      'Assignee': task['Assignee'],
+      'Reporter': task['Reporter'],
+      'Priority': task['Priority'],
+      'Original estimate': task['Original estimate'],
+      'Issue Type': task['Issue Type'],
+      'Labels': mergeTaskLabels(task, headers),
+      // подумать что еще может быть нужно для отчетов, пока что юзаю просто свой датасет
+    };
     return compressedTask;
   });
 };
@@ -41,19 +63,28 @@ export const useTaskData = () => {
     const headers = rawData[0];
     
     const formattedData = rawData.slice(1).map((row) => {
-      return headers.reduce((obj, header, i) => {
-        obj[header] = row[i];
-        return obj;
-      }, {} as TaskData);
+      const task: TaskData = {};
+      
+      headers.forEach((header, index) => {
+        if (header !== 'Labels') {
+          task[header] = row[index];
+        } else {
+          task[`col_${index}`] = row[index];
+        }
+      });
+      
+      task.mergedLabels = mergeTaskLabels(task, headers);
+      return task;
     });
     
-    const compressedData = compressData(formattedData);
+    const compressedData = compressData(formattedData, headers);
 
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData));
     } catch (e) {
       console.error('Failed to save data to localStorage', e);
-      // добавить fallback - сохранение первых N записей
+      // добавить fallback - сохранение первых N записей (добавила но нужно ли?)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData.slice(0, 500)));
     }
 
     setData(compressedData);
@@ -135,12 +166,32 @@ export const useTaskData = () => {
     }));
   }, [data]);
 
+  const labelStats = useMemo((): ChartData[] => {
+    if (!data.length) return [];
+    
+    const labelCounts: Record<string, number> = {};
+
+    data.forEach(task => {
+      if (!task.mergedLabels) return;
+      
+      const labels = task.mergedLabels.split(', ').filter(Boolean);
+      labels.forEach(label => {
+        labelCounts[label] = (labelCounts[label] || 0) + 1;
+      });
+    });
+
+    return Object.entries(labelCounts)
+      .map(([label, count]) => ({ type: label, count }))
+      .sort((a, b) => b.count - a.count); // возможно неправильно сортировать по убыванию, но пока не знаю как надо
+  }, [data]);
+
   return {
     data,
     taskTypeStats,
     estimateStats,
     taskAssigneeStats,
     taskReporterStats,
+    labelStats,
     handleOnDrop,
     setData,
     clearData,
