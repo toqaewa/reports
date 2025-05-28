@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 
 type TaskData = Record<string, string> & {
   mergedLabels?: string;
+  sprintCount?: string;
 };
 
 type ChartData = { type: string; count?: number; estimate?: number };
@@ -25,6 +26,23 @@ const mergeTaskLabels = (task: TaskData, headers: string[]): string => {
   return allLabels.join(', ');
 };
 
+// в экспорте jira каждый спринт это тоже отдельное поле с названием спринта (Design Sprint 69), сколько спринтов путешествовала таска - столько и полей
+const countSprints = (task: TaskData, headers: string[]): string => {
+  const sprintIndices = headers
+    .map((header, index) => header === 'Sprint' ? index : -1)
+    .filter(index => index !== -1);
+
+  let count = 0;
+  sprintIndices.forEach(index => {
+    const value = task[`col_${index}`]; // Используем специальный ключ
+    if (value && value.trim() !== '') {
+      count++;
+    }
+  });
+
+  return count.toString(); // ВНИМАНИЕ: тут привожу кол-во спринтов к строке
+};
+
 const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
   return data.map(task => {
     const compressedTask: TaskData = {
@@ -34,6 +52,7 @@ const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
       'Priority': task['Priority'],
       'Original estimate': task['Original estimate'],
       'Issue Type': task['Issue Type'],
+      'sprintCount': countSprints(task, headers),
       'Labels': mergeTaskLabels(task, headers),
       // подумать что еще может быть нужно для отчетов, пока что юзаю просто свой датасет
     };
@@ -66,7 +85,7 @@ export const useTaskData = () => {
       const task: TaskData = {};
       
       headers.forEach((header, index) => {
-        if (header !== 'Labels') {
+        if ((header !== 'Labels') && (header !== 'Sprint')) {
           task[header] = row[index];
         } else {
           task[`col_${index}`] = row[index];
@@ -74,6 +93,7 @@ export const useTaskData = () => {
       });
       
       task.mergedLabels = mergeTaskLabels(task, headers);
+      task.sprintCount = countSprints(task, headers);
       return task;
     });
     
@@ -185,12 +205,30 @@ export const useTaskData = () => {
       .sort((a, b) => b.count - a.count); // возможно неправильно сортировать по убыванию, но пока не знаю как надо
   }, [data]);
 
+  const sprintStats = useMemo((): ChartData[] => {
+    if (!data.length) return [];
+    
+    const sprintDistribution = data.reduce((acc, task) => {
+      const count = parseInt(task.sprintCount || '0'); // перевожу в число потому что ранее приводила к строке 🤡 (переписать бы?)
+      acc[count] = (acc[count] || 0) + 1;
+      return acc;
+    }, {} as Record<number, number>);
+
+    return Object.entries(sprintDistribution)
+      .map(([sprintNum, count]) => ({
+        type: `${sprintNum} спринтов`,
+        count
+      }))
+      .sort((a, b) => parseInt(a.type) - parseInt(b.type));
+  }, [data]);
+
   return {
     data,
     taskTypeStats,
     estimateStats,
     taskAssigneeStats,
     taskReporterStats,
+    sprintStats,
     labelStats,
     handleOnDrop,
     setData,
