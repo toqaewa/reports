@@ -13,27 +13,25 @@ html, body, #root {
 }
 
 .light-theme {
-  --bg-color: #F8F9FA;
-  --text-color: #343A40;
-  --title-color: #212529;
-  --caption-color: #868E96;
-  --card-color: #F1F3F5;
-  --primary-color: #845EF7;
+  --bg-color: #F7F8F9;
+  --text-color: #2C333A;
+  --title-color: #1D2125;
+  --caption-color: #596773;
+  --card-color: #F1F2F4;
+  --primary-color: #8F7EE7;
   --secondary-color: #A78CF8;
   --tertiary-color: #D5CAF9;
-  --accent-color: #1e40af;
 }
 
 .dark-theme {
-  --bg-color: #212529;
-  --text-color: #F1F3F5;
-  --title-color: #F8F9FA;
-  --caption-color: #868E96;
-  --card-color: #343A40;
-  --primary-color: #5F3DC4;
-  --secondary-color: #403177;
-  --tertiary-color: #2D2A48;
-  --accent-color: #60a5fa;
+  --bg-color: #1D2125;
+  --text-color: #9FADBC;
+  --title-color: #DEE4EA;
+  --caption-color: #596773;
+  --card-color: #22272B;
+  --primary-color: #8270DB;
+  --secondary-color: #5E4DB2;
+  --tertiary-color: #352C63;
 }
 
 code {

@@ -34,7 +34,7 @@ const countSprints = (task: TaskData, headers: string[]): string => {
 
   let count = 0;
   sprintIndices.forEach(index => {
-    const value = task[`col_${index}`]; // Используем специальный ключ
+    const value = task[`col_${index}`];
     if (value && value.trim() !== '') {
       count++;
     }
@@ -52,7 +52,7 @@ const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
       'Priority': task['Priority'],
       'Original estimate': task['Original estimate'],
       'Issue Type': task['Issue Type'],
-      'sprintCount': countSprints(task, headers),
+      'Sprint Count': countSprints(task, headers),
       'Labels': mergeTaskLabels(task, headers),
       // подумать что еще может быть нужно для отчетов, пока что юзаю просто свой датасет
     };
@@ -103,7 +103,6 @@ export const useTaskData = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData));
     } catch (e) {
       console.error('Failed to save data to localStorage', e);
-      // добавить fallback - сохранение первых N записей (добавила но нужно ли?)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(compressedData.slice(0, 500)));
     }
 
@@ -202,14 +201,14 @@ export const useTaskData = () => {
 
     return Object.entries(labelCounts)
       .map(([label, count]) => ({ type: label, count }))
-      .sort((a, b) => b.count - a.count); // возможно неправильно сортировать по убыванию, но пока не знаю как надо
+      .sort((a, b) => b.count - a.count);
   }, [data]);
 
   const sprintStats = useMemo((): ChartData[] => {
     if (!data.length) return [];
     
     const sprintDistribution = data.reduce((acc, task) => {
-      const count = parseInt(task.sprintCount || '0'); // перевожу в число потому что ранее приводила к строке 🤡 (переписать бы?)
+      const count = parseInt(task.sprintCount || '0');
       acc[count] = (acc[count] || 0) + 1;
       return acc;
     }, {} as Record<number, number>);

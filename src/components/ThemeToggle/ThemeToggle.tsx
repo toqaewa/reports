@@ -3,7 +3,6 @@ import './ThemeToggle.css';
 
 const ThemeToggle: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = React.useState(() => {
-    // Проверяем сохраненную тему или предпочитаемую пользователем
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
