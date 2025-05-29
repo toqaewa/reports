@@ -81,20 +81,6 @@ export const DataTable: React.FC<DataTableProps> = ({ data, globalFilter }) => {
                   style={{ minWidth: header.getSize() }}
                 >
                   {flexRender(header.column.columnDef.header, header.getContext())}
-                  <div
-                    onMouseDown={header.getResizeHandler()}
-                    onTouchStart={header.getResizeHandler()}
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      top: 0,
-                      height: '100%',
-                      width: '4px',
-                      borderRadius: '2px',
-                      background: header.column.getIsResizing() ? '#71483B' : 'transparent',
-                      cursor: 'col-resize',
-                    }}
-                  />
                 </th>
               ))}
             </tr>
