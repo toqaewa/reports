@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import "./CSVUploader.css";
 
@@ -8,33 +8,55 @@ interface CSVUploaderProps {
 }
 
 interface CSVReaderChildrenProps {
-    getRootProps: () => {
-      onClick: (e: React.MouseEvent<HTMLElement>) => void;
-      onDragOver: (e: React.DragEvent<HTMLElement>) => void;
-      onDragLeave: (e: React.DragEvent<HTMLElement>) => void;
-      onDrop: (e: React.DragEvent<HTMLElement>) => void;
-    };
-    acceptedFile: File | null;
-    ProgressBar: React.FC;
-    getRemoveFileProps: () => any;
-  }
+  getRootProps: () => {
+    onClick: (e: React.MouseEvent<HTMLElement>) => void;
+    onDragOver: (e: React.DragEvent<HTMLElement>) => void;
+    onDragLeave: (e: React.DragEvent<HTMLElement>) => void;
+    onDrop: (e: React.DragEvent<HTMLElement>) => void;
+  };
+  acceptedFile: File | null;
+  ProgressBar: React.FC;
+  getRemoveFileProps: () => any;
+}
+
+const STORAGE_KEY = 'csvUploaderFileInfo';
 
 export const CSVUploader: React.FC<CSVUploaderProps> = ({ onDrop, onClear }) => {
   const { CSVReader } = useCSVReader();
+  const [storedFile, setStoredFile] = useState<{ name: string, size: number } | null>(null);
+
+  useEffect(() => {
+    const savedFile = localStorage.getItem(STORAGE_KEY);
+    if (savedFile) {
+      try {
+        setStoredFile(JSON.parse(savedFile));
+      } catch (e) {
+        console.error('Failed to parse saved file info', e);
+      }
+    }
+  }, []);
+
+  const handleFileAccepted = (results: any, file: File) => {
+    const fileInfo = { name: file.name, size: file.size };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(fileInfo));
+    setStoredFile(fileInfo);
+    onDrop(results);
+  };
 
   const handleRemove = (e: React.MouseEvent, getRemoveFileProps: () => any) => {
+    localStorage.removeItem(STORAGE_KEY);
+    setStoredFile(null);
+    
     const { onClick: originalOnClick } = getRemoveFileProps();
     originalOnClick(e);
     
-    if (onClear) {
-      onClear();
-    }
+    if (onClear) onClear();
   };
 
   return (
     <div>
       <CSVReader
-        onUploadAccepted={onDrop}
+        onUploadAccepted={(results: any, file: File) => handleFileAccepted(results, file)}
         onError={(error: Error) => console.error(error)}
       >
         {({
@@ -42,14 +64,17 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({ onDrop, onClear }) => 
           acceptedFile,
           ProgressBar,
           getRemoveFileProps,
-        }: CSVReaderChildrenProps) => (
-          <div className='csv-uploader'>
+        }: CSVReaderChildrenProps) => {
+          const displayFile = acceptedFile || storedFile;
+
+          return (
+            <div className='csv-uploader'>
             <div {...getRootProps()} className='drag-area'>
               Выберите или перетащите CSV файл с экспортом задач из Jira
             </div>
-            {acceptedFile && (
+            {displayFile && (
               <div className='accepted-file'>
-                <h3>{acceptedFile.name}</h3>
+                <h3>{displayFile.name}</h3>
                 <ProgressBar />
                 <button
                   onClick={(e) => handleRemove(e, getRemoveFileProps)}
@@ -66,7 +91,8 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({ onDrop, onClear }) => 
               </div>
             )}
           </div>
-        )}
+          );
+        }}
       </CSVReader>
     </div>
   );

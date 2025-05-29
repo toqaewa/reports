@@ -5,11 +5,11 @@
     flex-direction: column;
     margin: 24px;
     gap: 16px;
-    background-color: var(--card-color);
 }
 
 .drag-area {
     border: 1px dashed var(--caption-color);
+    background-color: var(--card-color);
     border-radius: 8px;
     padding: 20px;
     text-align: center;
