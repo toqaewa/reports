@@ -9,9 +9,10 @@ import { TaskAssigneeChart } from '../Charts/TaskAssigneeChart';
 import { DataTable } from '../DataTable/DataTable';
 import { Input } from '../Input/Input';
 import { TaskReporterChart } from '../Charts/TaskReporterChart';
+import { TaskPriorityChart } from '../Charts/TaskPriorityChart';
 
 export const QuarterlyReport: React.FC = () => {
-  const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, handleOnDrop, clearData } = useTaskData();
+  const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, taskPriorityStats, handleOnDrop, clearData } = useTaskData();
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
   return (
@@ -24,6 +25,7 @@ export const QuarterlyReport: React.FC = () => {
         <div>
           <div className="charts-section">
             <TaskTypeChart data={taskTypeStats} />
+            <TaskPriorityChart data={taskPriorityStats} />
             <EstimateChart data={estimateStats} />
             <TaskAssigneeChart data={taskAssigneeStats} />
             <TaskReporterChart data={taskReporterStats} />

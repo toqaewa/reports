@@ -46,14 +46,14 @@ const countSprints = (task: TaskData, headers: string[]): string => {
 const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
   return data.map(task => {
     const compressedTask: TaskData = {
-      'Summary': task['Summary'],
-      'Assignee': task['Assignee'],
-      'Reporter': task['Reporter'],
-      'Priority': task['Priority'],
-      'Original estimate': task['Original estimate'],
-      'Issue Type': task['Issue Type'],
-      'Sprint Count': countSprints(task, headers),
-      'Labels': mergeTaskLabels(task, headers),
+      'Описание': task['Summary'],
+      'Исполнитель': task['Assignee'],
+      'Менеджер': task['Reporter'],
+      'Приоритет': task['Priority'],
+      'Оценка (в часах)': task['Original estimate'] && (parseFloat(task['Original estimate'])/3600).toFixed(2).toString(),
+      'Тип': task['Issue Type'],
+      'Кол-во спринтов': countSprints(task, headers),
+      'Лейблы': mergeTaskLabels(task, headers),
       // подумать что еще может быть нужно для отчетов, пока что юзаю просто свой датасет
     };
     return compressedTask;
@@ -118,7 +118,7 @@ export const useTaskData = () => {
     if (!data.length) return [];
     
     const typeCounts = data.reduce((acc, task) => {
-      const type = task['Issue Type']?.trim();
+      const type = task['Тип']?.trim();
       if (!type || type === 'Unknown') return acc;
       
       acc[type] = (acc[type] || 0) + 1;
@@ -130,15 +130,32 @@ export const useTaskData = () => {
       count
     }));
   }, [data]);
+
+  const taskPriorityStats = useMemo((): ChartData[] => {
+    if (!data.length) return [];
+    
+    const priorityCounts = data.reduce((acc, task) => {
+      const priority = task['Приоритет']?.trim();
+      if (!priority || priority === 'Unknown') return acc;
+      
+      acc[priority] = (acc[priority] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(priorityCounts).map(([priority, count]) => ({
+      type: priority,
+      count
+    }));
+  }, [data]);
   
   const estimateStats = useMemo((): ChartData[] => {
     if (!data.length) return [];
     
     return data.reduce((acc, task) => {
-      const type = task['Issue Type']?.trim();
+      const type = task['Тип']?.trim();
       if (!type || type === 'Unknown') return acc;
       
-      const estimate = Math.round(parseFloat(task['Original estimate'] || '0')/3600) || 0;
+      const estimate = Math.round(parseFloat(task['Оценка (в часах)'] || '0')) || 0;
       const existing = acc.find(item => item.type === type);
 
       if (existing) {
@@ -155,7 +172,7 @@ export const useTaskData = () => {
     if (!data.length) return [];
     
     const assigneeCounts = data.reduce((acc, task) => {
-      const type = task['Assignee']?.trim();
+      const type = task['Исполнитель']?.trim();
       if (!type || type === 'Unknown') return acc;
       
       acc[type] = (acc[type] || 0) + 1;
@@ -172,7 +189,7 @@ export const useTaskData = () => {
     if (!data.length) return [];
     
     const reporterCounts = data.reduce((acc, task) => {
-      const type = task['Reporter']?.trim();
+      const type = task['Менеджер']?.trim();
       if (!type || type === 'Unknown') return acc;
       
       acc[type] = (acc[type] || 0) + 1;
@@ -224,6 +241,7 @@ export const useTaskData = () => {
   return {
     data,
     taskTypeStats,
+    taskPriorityStats,
     estimateStats,
     taskAssigneeStats,
     taskReporterStats,
