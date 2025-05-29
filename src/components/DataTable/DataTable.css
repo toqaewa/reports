@@ -32,6 +32,7 @@ th {
     color: var(--title-color);
     font-size: 14px;
     font-weight: 500;
+    max-width: 240px;
 }
 
 .table-row td:first-child {
