@@ -11,14 +11,14 @@ import { Input } from '../Input/Input';
 import { TaskReporterChart } from '../Charts/TaskReporterChart';
 
 export const QuarterlyReport: React.FC = () => {
-  const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, handleOnDrop } = useTaskData();
+  const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, handleOnDrop, clearData } = useTaskData();
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
   return (
     <div>
       <div className='title-section'><h1>Отчет о квартальных результатах команды</h1></div>
       
-      <CSVUploader onDrop={handleOnDrop} />
+      <CSVUploader onDrop={handleOnDrop} onClear={clearData} />
 
       {data.length > 0 && (
         <div>
