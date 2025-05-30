@@ -206,19 +206,30 @@ export const useTaskData = () => {
     if (!data.length) return [];
     
     const labelCounts: Record<string, number> = {};
+    let noLabelCount = 0;
 
     data.forEach(task => {
-      if (!task.mergedLabels) return;
+      if (!task["Лейблы"] || task["Лейблы"].trim() === '') {
+        noLabelCount++;
+        return;
+      }
       
-      const labels = task.mergedLabels.split(', ').filter(Boolean);
+      const labels = task["Лейблы"].split(',').map(label => label.trim()).filter(Boolean);
+
       labels.forEach(label => {
         labelCounts[label] = (labelCounts[label] || 0) + 1;
       });
     });
 
-    return Object.entries(labelCounts)
+    const result = Object.entries(labelCounts)
       .map(([label, count]) => ({ type: label, count }))
       .sort((a, b) => b.count - a.count);
+
+    if (noLabelCount > 0) {
+      result.push({ type: "Без лейбла", count: noLabelCount });
+    }
+
+    return result;
   }, [data]);
 
   const sprintStats = useMemo((): ChartData[] => {

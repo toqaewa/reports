@@ -8,7 +8,6 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip">
-          {/* <div style={{ color: "#DCD8D3", fontSize: "12px", lineHeight: "16px", textAlign: "left" }}>{label}</div> */}
           <div style={{display: "flex", flexDirection: "column", gap: 8}}>
             {payload.map((pld) => (
                 <div style={{ display: "flex", flexDirection: "column" }}>
