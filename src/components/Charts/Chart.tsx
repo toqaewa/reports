@@ -1,15 +1,18 @@
 import React from 'react';
+import "../../index.css";
 import "./Chart.css"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CustomTooltip from './CustomTooltip';
 
-interface TaskAssigneeChartProps {
+interface ChartProps {
   data: { type: string; count?: number; estimate?: number }[];
+  name: string;
+  dataKey: string;
 }
 
-export const TaskAssigneeChart: React.FC<TaskAssigneeChartProps> = ({ data }) => (
+export const Chart: React.FC<ChartProps> = ({ data, name, dataKey }) => (
   <div className="chart-container">
-    <h2>Распределение задач по исполнителю</h2>
+    <h2>{name}</h2>
     <ResponsiveContainer width="100%" height={400}>
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" strokeOpacity="0.5" />
@@ -20,8 +23,7 @@ export const TaskAssigneeChart: React.FC<TaskAssigneeChartProps> = ({ data }) =>
           cursor={false}
         />
         <Bar 
-          dataKey="count" 
-          name="Количество задач"
+          dataKey={dataKey} 
           radius={[4, 4, 0, 0]}
           activeBar={{ fillOpacity: 0.8 }}
         />

@@ -3,14 +3,9 @@ import "./QuarterlyReport.css"
 import { useTaskData } from '../../hooks/useTaskData';
 import { useSearch } from '../../hooks/useSearch';
 import { CSVUploader } from '../CSVUploader/CSVUploader';
-import { TaskTypeChart } from '../Charts/TaskTypeChart';
-import { EstimateChart } from '../Charts/EstimateChart';
-import { TaskAssigneeChart } from '../Charts/TaskAssigneeChart';
 import { DataTable } from '../DataTable/DataTable';
 import { Input } from '../Input/Input';
-import { TaskReporterChart } from '../Charts/TaskReporterChart';
-import { TaskPriorityChart } from '../Charts/TaskPriorityChart';
-import { TaskLabelChart } from '../Charts/TaskLabelChart';
+import { Chart } from '../Charts/Chart';
 
 export const QuarterlyReport: React.FC = () => {
   const { data, taskTypeStats, estimateStats, taskAssigneeStats, taskReporterStats, taskPriorityStats, labelStats, handleOnDrop, clearData } = useTaskData();
@@ -25,12 +20,13 @@ export const QuarterlyReport: React.FC = () => {
       {data.length > 0 && (
         <div>
           <div className="charts-section">
-            <TaskTypeChart data={taskTypeStats} />
-            <TaskPriorityChart data={taskPriorityStats} />
-            <EstimateChart data={estimateStats} />
-            <TaskAssigneeChart data={taskAssigneeStats} />
-            <TaskReporterChart data={taskReporterStats} />
-            <TaskLabelChart data={labelStats} />
+            <Chart data={taskTypeStats} name='Распределение задач по типам' dataKey='count' />
+            <Chart data={taskPriorityStats} name='Распределение задач по приоритету' dataKey='count' />
+            <Chart data={estimateStats} name='Распределение эстимейта по задачам' dataKey='estimate' />
+            <Chart data={taskAssigneeStats} name='Распределение задач по исполнителю' dataKey='count' />
+            <Chart data={taskReporterStats} name='Распределение задач по менеджеру' dataKey='count' />
+            <Chart data={labelStats} name='Распределение задач по лейблам' dataKey='count' />
+            {/* <Chart data={} name='' dataKey='' /> */}
           </div>
           
           <div className="table-section">
