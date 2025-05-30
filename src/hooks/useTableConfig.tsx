@@ -1,4 +1,4 @@
-import { ColumnDef, ColumnOrderState, ColumnFiltersState, SortingState } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import highlightMatches from '../components/DataTable/HighlightMatches';
 
