@@ -22,7 +22,7 @@ export const useTableConfig = (data: TaskData[], globalFilter: string) => {
       data.forEach(item => {
         const value = item[key];
         if (value) {
-          if (key === 'лейблы') {
+          if (key === 'Лейблы') {
             value.split(',').forEach(v => values.add(v.trim()));
           } else {
             values.add(value);
