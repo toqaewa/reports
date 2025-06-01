@@ -1,7 +1,6 @@
-import { ColumnDef, ColumnOrderState, ColumnFiltersState, SortingState } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import highlightMatches from '../components/DataTable/HighlightMatches';
-import { MultiSelect } from '../components/MultiSelect/MultiSelect';
 
 type TaskData = Record<string, string>;
 
@@ -14,62 +13,63 @@ const priorityOrder = {
 };
 
 export const useTableConfig = (data: TaskData[], globalFilter: string) => {
-  const tableColumns = useMemo<ColumnDef<TaskData>[]>(() => {
-    if (data.length === 0) return [];
 
-    const getUniqueValues = (key: string) => {
-      const values = new Set<string>();
-      data.forEach(item => {
-        const value = item[key];
-        if (value) {
-          if (key === 'Лейблы') {
-            value.split(',').forEach(v => values.add(v.trim()));
-          } else {
-            values.add(value);
-          }
+  const getUniqueValues = (key: string) => {
+    const values = new Set<string>();
+    data.forEach(item => {
+      const value = item[key];
+      if (value) {
+        if (key === 'Лейблы') {
+          value.split(',').forEach(v => values.add(v.trim()));
+        } else {
+          values.add(value);
         }
-      });
-      return Array.from(values).sort();
-    };
+      }
+    });
+    return Array.from(values).sort();
+  };
 
+  const filterConfigs = useMemo(() => {
+    if (data.length === 0) return [];
     
     const firstRow = data[0];
+    return Object.keys(firstRow)
+      .filter(key => !['Описание', 'Оценка (в часах)', 'Кол-во спринтов'].includes(key))
+      .map((key) => ({
+        columnId: key,
+        placeholder: key,
+        options: getUniqueValues(key),
+        isMulti: true
+      }));
+  }, [data]);
+
+  const tableColumns = useMemo<ColumnDef<TaskData>[]>(() => {
+    if (data.length === 0) return [];
     
+    const firstRow = data[0];
     return Object.keys(firstRow).map((key) => {
       const columnDef: ColumnDef<TaskData> = {
         accessorKey: key,
-        header: ({ column }) => {
-          if (key === 'Описание') {
-            return <div>{key}</div>;
-          }
-
-          return (
-            <div>
-              <span 
-                onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                style={{ cursor: 'pointer', marginRight: '5px' }}
-              >
-                {key} {column.getIsSorted() === 'asc' ? '↑' : column.getIsSorted() === 'desc' ? '↓' : ''}
-              </span>
-              
-              {['Исполнитель', 'Менеджер', 'Приоритет', 'Тип', 'Лейблы'].includes(key) && (
-                <MultiSelect
-                  options={getUniqueValues(key)}
-                  selected={column.getFilterValue() as string[] || []}
-                  onChange={(selected) => column.setFilterValue(selected.length ? selected : undefined)}
-                />
-              )}
-              
-              {['Оценка (в часах)', 'Кол-во спринтов'].includes(key) && (
-                <input
-                  placeholder={`Фильтр ${key}`}
-                  value={(column.getFilterValue() as string) ?? ''}
-                  onChange={e => column.setFilterValue(e.target.value)}
-                />
-              )}
-            </div>
-          );
-        },
+        header: ({ column }) => (
+          <div 
+            className="header-clickable" 
+            onClick={() => column.toggleSorting()}
+          >
+            {key}
+            <span className="sort-icon">
+              {{
+                asc: 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6.41421 14C5.52331 14 5.07714 12.9229 5.70711 12.2929L11.2929 6.70711C11.6834 6.31658 12.3166 6.31658 12.7071 6.70711L18.2929 12.2929C18.9229 12.9229 18.4767 14 17.5858 14H6.41421Z" fill="currentColor"/>
+                  </svg>,
+                desc:
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M6.41421 10C5.52331 10 5.07714 11.0771 5.70711 11.7071L11.2929 17.2929C11.6834 17.6834 12.3166 17.6834 12.7071 17.2929L18.2929 11.7071C18.9229 11.0771 18.4767 10 17.5858 10H6.41421Z" fill="currentColor"/>
+                  </svg>,
+              }[column.getIsSorted() as string] ?? null}
+            </span>
+          </div>
+        ),
         cell: (info) => {
           const value = String(info.getValue());
           return highlightMatches(value, globalFilter);
@@ -116,8 +116,8 @@ export const useTableConfig = (data: TaskData[], globalFilter: string) => {
     });
   }, [data, globalFilter]);
 
-
   return {
-    tableColumns
+    tableColumns,
+    filterConfigs
   };
 };

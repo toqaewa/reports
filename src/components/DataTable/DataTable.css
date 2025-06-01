@@ -1,5 +1,25 @@
 @import url('../../index.css');
 
+.data-table-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.table-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 8px;
+    z-index: 2;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 200px;
+}
+
 .table-container {
     height: 640px;
     overflow: auto;
@@ -24,6 +44,26 @@ th {
     padding: 12px;
     text-align: left;
     position: relative;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.header-clickable {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-clickable:hover {
+    color: var(--secondary-color);
+}
+
+.sort-icon {
+    width: 16px;
+    height: 16px;
 }
 
 .table-row td {
