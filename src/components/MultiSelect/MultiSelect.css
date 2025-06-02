@@ -1,0 +1,148 @@
+@import url('../../index.css');
+
+.multi-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.multi-select .select__control {
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    font-size: 14px;
+    outline: none;
+    background: var(--card-color);
+    color: var(--title-color);
+    font-family: 'Open Sans';
+    box-shadow: none;
+}
+
+.multi-select .select__control:hover {
+    background: var(--card-color);
+    color: var(--title-color);
+    border: 1px solid var(--tertiary-color);
+}
+
+.multi-select .select__control--is-focused {
+    border: 1px solid var(--secondary-color) !important;
+    background: var(--card-color);
+    color: var(--title-color);
+    box-shadow: none;
+}
+
+.multi-select-placeholder {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-color);
+    margin-left: 0;
+    position: absolute;
+    left: 8px;
+    top: 25%;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
+}
+
+.multi-select-container:focus-within .multi-select-placeholder {
+    font-size: 12px;
+    margin-left: 0;
+    top: -2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 16px;
+}
+
+.multi-select-placeholder-minimized {
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--text-color);
+    margin-left: 0;
+    position: absolute;
+    left: 8px;
+    top: -2px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
+}
+
+.multi-select .select__input {
+    color: var(--title-color);
+}
+
+.multi-select .select__multi-value {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.multi-select .select__multi-value__label {
+    color: var(--title-color);
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.multi-select .select__multi-value__remove {
+    color: var(--text-color);
+}
+
+.multi-select .select__multi-value__remove:hover {
+    background: transparent;
+    color: var(--secondary-color);
+}
+
+/* .multi-select .select__multi-value__remove:hover ~ .select__dropdown-indicator {
+    color: var(--text-color);
+} */
+
+.multi-select .select__menu {
+    background: var(--card-color);
+    border-radius: 16px;
+    margin-top: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.multi-select .select__option {
+    color: var(--title-color);
+    background: var(--card-color);
+    padding: 10px 16px;
+}
+
+.multi-select .select__option--is-focused {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* .multi-select .select__indicator {
+    color: var(--text-color);
+    padding: 8px;
+}
+
+.multi-select .select__indicator:hover {
+    color: var(--secondary-color);
+} */
+
+.multi-select .select__clear-indicator {
+    color: var(--text-color);
+}
+
+.multi-select .select__clear-indicator:hover {
+    color: var(--secondary-color);
+}
+
+.multi-select .select__dropdown-indicator {
+    color: var(--text-color);
+}
+
+.multi-select-container:hover .select__dropdown-indicator {
+    color: var(--secondary-color);
+}
+
+.multi-select .select__clear-indicator:hover ~ .select__dropdown-indicator {
+    color: var(--text-color) !important;
+}

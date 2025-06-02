@@ -16,7 +16,7 @@
 }
 
 .filter-item {
-    flex: 1;
+    /* flex: 1; */
     min-width: 200px;
 }
 
