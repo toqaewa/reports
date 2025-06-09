@@ -15,7 +15,7 @@ export const Chart: React.FC<ChartProps> = ({ data, name, dataKey }) => (
     <h2>{name}</h2>
     <ResponsiveContainer width="100%" height={400}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" strokeOpacity="0.5" />
+        <CartesianGrid horizontal={true} vertical={false} strokeDasharray="3 3" strokeOpacity="0.3" />
         <XAxis dataKey="type" />
         <YAxis />
         <Tooltip 
