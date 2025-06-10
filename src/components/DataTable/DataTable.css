@@ -33,7 +33,7 @@ table {
     /* position: relative; */
 }
 
-thead {
+thead tr {
     position: sticky;
     top: 0;
     z-index: 1;
