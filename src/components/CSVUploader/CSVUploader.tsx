@@ -74,7 +74,7 @@ export const CSVUploader: React.FC<CSVUploaderProps> = ({ onDrop, onClear }) => 
             </div>
             {displayFile && (
               <div className='accepted-file'>
-                <h3>{displayFile.name}</h3>
+                <h3 style={{ width: '100%' }}>{displayFile.name}</h3>
                 <ProgressBar />
                 <button
                   onClick={(e) => handleRemove(e, getRemoveFileProps)}
