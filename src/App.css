@@ -1,7 +1,6 @@
 @import url('./index.css');
 
 .App {
-  font-family: 'Open Sans';
   font-size: 12px;
   color: var(--text-color);
   background-color: var(--bg-color);

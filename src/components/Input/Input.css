@@ -30,7 +30,7 @@
     outline: none;
     background: var(--card-color);
     color: var(--title-color);
-    font-family: 'Open Sans';
+    font-family: 'Nunito';
 }
 
 .placeholder-label {
