@@ -6,7 +6,8 @@
 }
 
 .multi-select .select__control {
-    padding: 4px;
+    height: 42px;
+    padding: 2px 4px 2px 2px;
     border: 1px solid transparent;
     border-radius: 16px;
     font-size: 14px;
@@ -15,6 +16,15 @@
     color: var(--title-color);
     font-family: 'Open Sans';
     box-shadow: none;
+}
+
+.multi-select .select__value-container {
+    padding-left: 2px;
+    margin-top: 8px;
+}
+
+.multi-select .select__input-container {
+    color: var(--title-color);
 }
 
 .multi-select .select__control:hover {
@@ -47,9 +57,9 @@
 }
 
 .multi-select-container:focus-within .multi-select-placeholder {
-    font-size: 12px;
+    font-size: 10px;
     margin-left: 0;
-    top: -2px;
+    top: 0px;
     overflow: hidden;
     text-overflow: ellipsis;
     height: 16px;
@@ -57,12 +67,12 @@
 
 .multi-select-placeholder-minimized {
     font-weight: 500;
-    font-size: 12px;
+    font-size: 10px;
     color: var(--text-color);
     margin-left: 0;
     position: absolute;
     left: 8px;
-    top: -2px;
+    top: 0px;
     transition: all 0.2s ease;
     pointer-events: none;
     padding: 0 4px;
@@ -78,7 +88,7 @@
 .multi-select .select__multi-value {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    padding: 4px;
+    padding: 0px 2px;
 }
 
 .multi-select .select__multi-value__label {
@@ -97,7 +107,7 @@
 }
 
 /* .multi-select .select__multi-value__remove:hover ~ .select__dropdown-indicator {
-    color: var(--text-color);
+    color: var(--text-color) !important;
 } */
 
 .multi-select .select__menu {
@@ -106,6 +116,11 @@
     margin-top: 4px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+}
+
+.multi-select .select__menu-list {
+    border-radius: 16px;
+    padding: 0px;
 }
 
 .multi-select .select__option {
@@ -118,17 +133,13 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-/* .multi-select .select__indicator {
-    color: var(--text-color);
-    padding: 8px;
+.multi-select .select__indicator-separator {
+    background-color: transparent;
 }
-
-.multi-select .select__indicator:hover {
-    color: var(--secondary-color);
-} */
 
 .multi-select .select__clear-indicator {
     color: var(--text-color);
+    padding: 2px;
 }
 
 .multi-select .select__clear-indicator:hover {
@@ -137,6 +148,7 @@
 
 .multi-select .select__dropdown-indicator {
     color: var(--text-color);
+    padding: 2px;
 }
 
 .multi-select-container:hover .select__dropdown-indicator {
