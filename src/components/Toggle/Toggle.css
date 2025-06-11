@@ -1,0 +1,57 @@
+@import url('../../index.css');
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle__label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-color);
+  transition: color 0.2s ease;
+}
+
+.toggle__label--active {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  height: 24px;
+  width: 44px;
+  align-items: center;
+  border-radius: 12px;
+  background-color: var(--caption-color);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  outline: none;
+}
+
+.toggle--active {
+  background-color: var(--tertiary-color);
+}
+
+.toggle--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggle__knob {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: var(--card-color);
+  transition: transform 0.2s ease;
+}
+
+.toggle__knob--active {
+  transform: translateX(18px);
+  background-color: var(--primary-color);
+}
