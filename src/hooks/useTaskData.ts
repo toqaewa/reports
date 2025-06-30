@@ -65,7 +65,7 @@ const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
   });
 };
 
-export const useTaskData = () => {
+export const useTaskData = (selectedTeam?: string | null) => {
   const [data, setData] = useState<TaskData[]>([]);
 
   useEffect(() => {
@@ -119,10 +119,16 @@ export const useTaskData = () => {
     localStorage.removeItem(STORAGE_KEY);
   };
 
+  // фильтр по команде
+  const filteredData = useMemo(() => {
+    if (!selectedTeam) return data;
+    return data.filter(task => task['Команда'] === selectedTeam);
+  }, [data, selectedTeam]);
+
   const taskTypeStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    const typeCounts = data.reduce((acc, task) => {
+    const typeCounts = filteredData.reduce((acc, task) => {
       const type = task['Тип']?.trim();
       if (!type || type === 'Unknown') return acc;
       
@@ -134,12 +140,12 @@ export const useTaskData = () => {
       type,
       count
     }));
-  }, [data]);
+  }, [filteredData]);
 
   const taskPriorityStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    const priorityCounts = data.reduce((acc, task) => {
+    const priorityCounts = filteredData.reduce((acc, task) => {
       const priority = task['Приоритет']?.trim();
       if (!priority || priority === 'Unknown') return acc;
       
@@ -151,12 +157,12 @@ export const useTaskData = () => {
       type: priority,
       count
     }));
-  }, [data]);
+  }, [filteredData]);
   
   const estimateStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    return data.reduce((acc, task) => {
+    return filteredData.reduce((acc, task) => {
       const type = task['Тип']?.trim();
       if (!type || type === 'Unknown') return acc;
       
@@ -171,12 +177,12 @@ export const useTaskData = () => {
       
       return acc;
     }, [] as ChartData[]);
-  }, [data]);
+  }, [filteredData]);
 
   const taskAssigneeStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    const assigneeCounts = data.reduce((acc, task) => {
+    const assigneeCounts = filteredData.reduce((acc, task) => {
       const type = task['Исполнитель']?.trim();
       if (!type || type === 'Unknown') return acc;
       
@@ -188,12 +194,12 @@ export const useTaskData = () => {
       type,
       count
     }));
-  }, [data]);
+  }, [filteredData]);
 
   const taskReporterStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    const reporterCounts = data.reduce((acc, task) => {
+    const reporterCounts = filteredData.reduce((acc, task) => {
       const type = task['Менеджер']?.trim();
       if (!type || type === 'Unknown') return acc;
       
@@ -205,15 +211,15 @@ export const useTaskData = () => {
       type,
       count
     }));
-  }, [data]);
+  }, [filteredData]);
 
   const labelStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
     const labelCounts: Record<string, number> = {};
     let noLabelCount = 0;
 
-    data.forEach(task => {
+    filteredData.forEach(task => {
       if (!task["Лейблы"] || task["Лейблы"].trim() === '') {
         noLabelCount++;
         return;
@@ -235,12 +241,12 @@ export const useTaskData = () => {
     }
 
     return result;
-  }, [data]);
+  }, [filteredData]);
 
   const sprintStats = useMemo((): ChartData[] => {
-    if (!data.length) return [];
+    if (!filteredData.length) return [];
     
-    const sprintDistribution = data.reduce((acc, task) => {
+    const sprintDistribution = filteredData.reduce((acc, task) => {
       const count = parseInt(task.sprintCount || '0');
       acc[count] = (acc[count] || 0) + 1;
       return acc;
@@ -252,9 +258,10 @@ export const useTaskData = () => {
         count
       }))
       .sort((a, b) => parseInt(a.type) - parseInt(b.type));
-  }, [data]);
+  }, [filteredData]);
 
   // для общей статы по командам - потом связать с этой логикой расчет параметров, зависимых от команды
+  // ВНИМАНИЕ!! статистика по командам всегда рассчитывается по всем данным
   const teamStats = useMemo((): StatsData[] => {
   if (!data.length) return [];
   
@@ -279,7 +286,8 @@ export const useTaskData = () => {
 }, [data]);
 
   return {
-    data,
+    filteredData,
+    data, // на всякий
     taskTypeStats,
     taskPriorityStats,
     estimateStats,

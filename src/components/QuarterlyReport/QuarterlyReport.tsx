@@ -9,6 +9,8 @@ import { Chart } from "../Charts/Chart";
 import { Stats } from "../Stats/Stats";
 
 export const QuarterlyReport: React.FC = () => {
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+
   const {
     data,
     taskTypeStats,
@@ -20,14 +22,14 @@ export const QuarterlyReport: React.FC = () => {
     teamStats,
     handleOnDrop,
     clearData,
-  } = useTaskData();
+  } = useTaskData(selectedTeam);
+  
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
-  const handleTeamSelect = (team: string) => {
-    setSelectedTeam(prev => prev === team ? null : team);
-  };
+  // const handleTeamSelect = (team: string) => {
+  //   setSelectedTeam(prev => prev === team ? null : team);
+  // };
 
   return (
     <div>
@@ -47,7 +49,7 @@ export const QuarterlyReport: React.FC = () => {
                 estimate={stat.estimate}
                 teamName={stat.team}
                 isSelected={selectedTeam === stat.team}
-                onClick={() => handleTeamSelect(stat.team)}
+                onClick={() => setSelectedTeam(prev => prev === stat.team ? null : stat.team)}
               />
             ))}
           </div>
