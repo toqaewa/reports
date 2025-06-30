@@ -15,3 +15,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.team-stats-section {
+    margin: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}

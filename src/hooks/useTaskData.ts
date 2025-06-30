@@ -7,6 +7,8 @@ type TaskData = Record<string, string> & {
 
 type ChartData = { type: string; count?: number; estimate?: number };
 
+type StatsData = { team: string; count: number; estimate: number };
+
 const STORAGE_KEY = 'quarterlyReportData';
 
 // в экспорте jira каждый лейбл - это отдельное поле, кол-во полей - это самое большое кол-во лейблов в задаче, так что мержу в 1 поле
@@ -55,6 +57,9 @@ const compressData = (data: TaskData[], headers: string[]): TaskData[] => {
       'Кол-во спринтов': countSprints(task, headers),
       'Лейблы': mergeTaskLabels(task, headers),
       // подумать что еще может быть нужно для отчетов, пока что юзаю просто свой датасет
+      
+      // данные из отчета Дениса
+      'Команда': task['Team Name'],
     };
     return compressedTask;
   });
@@ -249,6 +254,30 @@ export const useTaskData = () => {
       .sort((a, b) => parseInt(a.type) - parseInt(b.type));
   }, [data]);
 
+  // для общей статы по командам - потом связать с этой логикой расчет параметров, зависимых от команды
+  const teamStats = useMemo((): StatsData[] => {
+  if (!data.length) return [];
+  
+  const teamMap = new Map<string, { count: number; estimate: number }>();
+  
+  data.forEach(task => {
+    const team = task['Команда']?.trim() || 'Без команды';
+    const estimate = parseFloat(task['Оценка (в часах)'] || '0') || 0;
+    
+    const current = teamMap.get(team) || { count: 0, estimate: 0 };
+    teamMap.set(team, {
+      count: current.count + 1,
+      estimate: current.estimate + estimate
+    });
+  });
+  
+  return Array.from(teamMap.entries()).map(([team, { count, estimate }]) => ({
+    team,
+    count,
+    estimate: Math.round(estimate)
+  }));
+}, [data]);
+
   return {
     data,
     taskTypeStats,
@@ -258,6 +287,7 @@ export const useTaskData = () => {
     taskReporterStats,
     sprintStats,
     labelStats,
+    teamStats,
     handleOnDrop,
     setData,
     clearData,
