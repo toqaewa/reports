@@ -27,3 +27,12 @@
     width: fit-content;
     min-width: 120px;
 }
+
+.no-data-message {
+    font-size: large;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--caption-color);
+}
