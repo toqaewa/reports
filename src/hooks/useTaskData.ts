@@ -122,7 +122,10 @@ export const useTaskData = (selectedTeam?: string | null) => {
   // фильтр по команде
   const filteredData = useMemo(() => {
     if (!selectedTeam) return data;
-    return data.filter(task => task['Команда'] === selectedTeam);
+    return data.filter(task => {
+      const team = task['Команда']?.trim() || 'Без команды';
+      return team === selectedTeam;
+    });
   }, [data, selectedTeam]);
 
   const taskTypeStats = useMemo((): ChartData[] => {

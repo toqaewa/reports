@@ -32,3 +32,8 @@
 .stats-selected h4 {
     color: var(--primary-color);
 }
+
+.stats-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

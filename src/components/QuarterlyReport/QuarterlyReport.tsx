@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import "./QuarterlyReport.css";
 import { useTaskData } from "../../hooks/useTaskData";
 import { useSearch } from "../../hooks/useSearch";
@@ -23,9 +23,20 @@ export const QuarterlyReport: React.FC = () => {
     handleOnDrop,
     clearData,
   } = useTaskData(selectedTeam);
-  
+
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
+  const sortedTeamStats = useMemo(() => {
+    return [...teamStats].sort((a, b) => {
+      if (a.team === "Без команды") return 1;
+      if (b.team === "Без команды") return -1;
+
+      if (a.count === 0 && b.count > 0) return 1;
+      if (b.count === 0 && a.count > 0) return -1;
+
+      return b.count - a.count;
+    });
+  }, [teamStats]);
 
   // const handleTeamSelect = (team: string) => {
   //   setSelectedTeam(prev => prev === team ? null : team);
@@ -42,14 +53,19 @@ export const QuarterlyReport: React.FC = () => {
       {data.length > 0 && (
         <div>
           <div className="team-stats-section">
-            {teamStats.map((stat) => (
+            {sortedTeamStats.map((stat) => (
               <Stats
                 key={stat.team}
                 count={stat.count}
                 estimate={stat.estimate}
                 teamName={stat.team}
                 isSelected={selectedTeam === stat.team}
-                onClick={() => setSelectedTeam(prev => prev === stat.team ? null : stat.team)}
+                onClick={() =>
+                  setSelectedTeam((prev) =>
+                    prev === stat.team ? null : stat.team
+                  )
+                }
+                disabled={stat.count === 0}
               />
             ))}
           </div>

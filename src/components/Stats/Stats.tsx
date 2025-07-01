@@ -6,11 +6,26 @@ interface StatsProps {
   teamName: string;
   isSelected: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-export const Stats: React.FC<StatsProps> = ({ count, estimate, teamName, isSelected, onClick }) => {
+export const Stats: React.FC<StatsProps> = ({
+  count,
+  estimate,
+  teamName,
+  isSelected,
+  onClick,
+  disabled = false,
+}) => {
   return (
-    <button className={`stats-card ${isSelected ? 'stats-selected' : ''}`} onClick={onClick}>
+    <button
+      className={`stats-card 
+        ${isSelected ? "stats-selected" : ""} 
+        ${disabled ? "stats-disabled" : ""}
+      `}
+      onClick={onClick}
+      disabled={disabled}
+    >
       <h4>Команда {teamName}</h4>
       <div className="stats-summary">
         <h3>{count} задач</h3>
