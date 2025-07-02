@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 import "./QuarterlyReport.css";
 import { useTaskData } from "../../hooks/useTaskData";
+import { useTaskStats } from "../../hooks/useTaskStats";
+import { useTeamStats } from "../../hooks/useTeamStats";
+import { useQuarterStats } from "../../hooks/useQuarterStats";
 import { useSearch } from "../../hooks/useSearch";
 import { CSVUploader } from "../CSVUploader/CSVUploader";
 import { DataTable } from "../DataTable/DataTable";
@@ -11,18 +14,22 @@ import { Stats } from "../Stats/Stats";
 export const QuarterlyReport: React.FC = () => {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
+  const { data, handleOnDrop, clearData } = useTaskData();
+
   const {
-    data,
+    filteredData,
     taskTypeStats,
+    taskPriorityStats,
     estimateStats,
     taskAssigneeStats,
     taskReporterStats,
-    taskPriorityStats,
+    sprintStats,
     labelStats,
-    teamStats,
-    handleOnDrop,
-    clearData,
-  } = useTaskData(selectedTeam);
+  } = useTaskStats(data, selectedTeam);
+
+  const { teamStats } = useTeamStats(data);
+
+  const { quarterStats, groupedStats } = useQuarterStats(data);
 
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
@@ -37,6 +44,11 @@ export const QuarterlyReport: React.FC = () => {
       return b.count - a.count;
     });
   }, [teamStats]);
+
+  const hasMultipleQuarters = useMemo(() => {
+    const validQuarters = quarterStats.filter((q) => q.quarter !== "Не указан");
+    return validQuarters.length > 1;
+  }, [quarterStats]);
 
   // const handleTeamSelect = (team: string) => {
   //   setSelectedTeam(prev => prev === team ? null : team);
@@ -69,6 +81,42 @@ export const QuarterlyReport: React.FC = () => {
               />
             ))}
           </div>
+
+          {data.length > 0 && hasMultipleQuarters && (
+            <div className="grouped-stats-section">
+              <h2>Сравнение по кварталам</h2>
+
+              {/* Группированный график по типам задач */}
+              <Chart
+                data={groupedStats.taskTypeStats}
+                name="Распределение задач по типам (по кварталам)"
+                dataKey="count"
+              />
+
+              {/* Группированный график по оценке */}
+              <Chart
+                data={groupedStats.estimateStats}
+                name="Распределение эстимейта (по кварталам)"
+                dataKey="estimate"
+              />
+
+              {/* Группированный график по приоритетам */}
+              <Chart
+                data={groupedStats.taskPriorityStats}
+                name="Распределение задач по приоритету (по кварталам)"
+                dataKey="count"
+              />
+
+              {/* Группированный график по лейблам */}
+              <Chart
+                data={groupedStats.labelStats}
+                name="Распределение задач по лейблам (по кварталам)"
+                dataKey="count"
+              />
+
+              {/* ... другие группированные графики ... */}
+            </div>
+          )}
 
           <div className="charts-section">
             <Chart
