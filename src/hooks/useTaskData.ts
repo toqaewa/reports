@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { TaskData } from "./types";
 
-const STORAGE_KEY = "quarterlyReportData";
-
 import { 
   mergeTaskLabels, 
   countSprints, 
   extractQuarter, 
   compressData 
 } from "./taskDataUtils";
+
+const STORAGE_KEY = "quarterlyReportData";
 
 export const useTaskData = () => {
   const [data, setData] = useState<TaskData[]>([]);
