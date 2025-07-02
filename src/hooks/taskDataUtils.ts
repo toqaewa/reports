@@ -37,36 +37,33 @@ export const countSprints = (task: TaskData, headers: string[]): string => {
   return count.toString();
 };
 
-export const extractQuarter = (parent: string): string | null => {
-  if (!parent) return null;
-  const match = parent.match(/(\d{4}) Q(\d)/i);
-  if (match && match[1] && match[2]) {
-    return `${match[1]} Q${match[2]}`;
-  }
-  return null;
+export const extractQuarter = (parent: string) => {
+  if (!parent) return "Не указан";
+  const match = parent.match(/(\d{4}) Q(\d)/i); 
+  return match ? `${match[1]} Q${match[2]}` : "Не указан";
 };
 
 export const compressData = (
-  data: TaskData[],
+  data: TaskData[], 
   headers: string[]
 ): TaskData[] => {
   return data.map((task) => {
-    const parent = task["Parent"];
+    const parent = task["Parent summary"];
     const quarter = extractQuarter(parent);
 
     return {
-      Описание: task["Summary"],
-      Исполнитель: task["Assignee"],
-      Менеджер: task["Reporter"],
-      Приоритет: task["Priority"],
+      "Описание": task["Summary"],
+      "Исполнитель": task["Assignee"],
+      "Менеджер": task["Reporter"],
+      "Приоритет": task["Priority"],
       "Оценка (в часах)":
         task["Original estimate"] &&
         (parseFloat(task["Original estimate"]) / 3600).toFixed(2).toString(),
-      Тип: task["Issue Type"],
+      "Тип": task["Issue Type"],
       "Кол-во спринтов": countSprints(task, headers),
-      Лейблы: mergeTaskLabels(task, headers),
-      Команда: task["Team Name"],
-      Квартал: quarter || "Не указан",
+      "Лейблы": mergeTaskLabels(task, headers),
+      "Команда": task["Team Name"],
+      "Квартал": quarter,
     };
   });
 };

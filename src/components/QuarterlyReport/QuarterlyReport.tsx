@@ -83,74 +83,76 @@ export const QuarterlyReport: React.FC = () => {
           </div>
 
           {data.length > 0 && hasMultipleQuarters && (
-            <div className="grouped-stats-section">
-              <h2>Сравнение по кварталам</h2>
-
-              {/* Группированный график по типам задач */}
+            <div className="grouped-charts-section">
               <Chart
                 data={groupedStats.taskTypeStats}
-                name="Распределение задач по типам (по кварталам)"
+                name="Распределение задач по типам"
                 dataKey="count"
               />
-
-              {/* Группированный график по оценке */}
-              <Chart
-                data={groupedStats.estimateStats}
-                name="Распределение эстимейта (по кварталам)"
-                dataKey="estimate"
-              />
-
-              {/* Группированный график по приоритетам */}
               <Chart
                 data={groupedStats.taskPriorityStats}
-                name="Распределение задач по приоритету (по кварталам)"
+                name="Распределение задач по приоритету"
                 dataKey="count"
               />
-
-              {/* Группированный график по лейблам */}
+              <Chart
+                data={groupedStats.estimateStats}
+                name="Распределение эстимейта по задачам"
+                dataKey="estimate"
+              />
+              <Chart
+                data={groupedStats.taskAssigneeStats}
+                name="Распределение задач по исполнителю"
+                dataKey="count"
+              />
+              <Chart
+                data={groupedStats.taskReporterStats}
+                name="Распределение задач по менеджеру"
+                dataKey="count"
+              />
               <Chart
                 data={groupedStats.labelStats}
-                name="Распределение задач по лейблам (по кварталам)"
+                name="Распределение задач по лейблам"
                 dataKey="count"
               />
-
-              {/* ... другие группированные графики ... */}
+              {/* <Chart data={} name='' dataKey='' /> */}
             </div>
           )}
 
-          <div className="charts-section">
-            <Chart
-              data={taskTypeStats}
-              name="Распределение задач по типам"
-              dataKey="count"
-            />
-            <Chart
-              data={taskPriorityStats}
-              name="Распределение задач по приоритету"
-              dataKey="count"
-            />
-            <Chart
-              data={estimateStats}
-              name="Распределение эстимейта по задачам"
-              dataKey="estimate"
-            />
-            <Chart
-              data={taskAssigneeStats}
-              name="Распределение задач по исполнителю"
-              dataKey="count"
-            />
-            <Chart
-              data={taskReporterStats}
-              name="Распределение задач по менеджеру"
-              dataKey="count"
-            />
-            <Chart
-              data={labelStats}
-              name="Распределение задач по лейблам"
-              dataKey="count"
-            />
-            {/* <Chart data={} name='' dataKey='' /> */}
-          </div>
+          {data.length > 0 && !hasMultipleQuarters && (
+            <div className="grouped-charts-section">
+              <Chart
+                data={taskTypeStats}
+                name="Распределение задач по типам"
+                dataKey="count"
+              />
+              <Chart
+                data={taskPriorityStats}
+                name="Распределение задач по приоритету"
+                dataKey="count"
+              />
+              <Chart
+                data={estimateStats}
+                name="Распределение эстимейта по задачам"
+                dataKey="estimate"
+              />
+              <Chart
+                data={taskAssigneeStats}
+                name="Распределение задач по исполнителю"
+                dataKey="count"
+              />
+              <Chart
+                data={taskReporterStats}
+                name="Распределение задач по менеджеру"
+                dataKey="count"
+              />
+              <Chart
+                data={labelStats}
+                name="Распределение задач по лейблам"
+                dataKey="count"
+              />
+              {/* <Chart data={} name='' dataKey='' /> */}
+            </div>
+          )}
 
           <div className="table-section">
             <h2>{data.length} задач</h2>

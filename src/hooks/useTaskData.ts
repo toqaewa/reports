@@ -13,6 +13,16 @@ const STORAGE_KEY = "quarterlyReportData";
 export const useTaskData = () => {
   const [data, setData] = useState<TaskData[]>([]);
 
+  const ensureQuarterData = (task: TaskData): TaskData => {
+    if (!task["Квартал"] && task["Parent"]) {
+      return {
+        ...task,
+        quarter: extractQuarter(task["Parent"]),
+      };
+    }
+    return task;
+  };
+
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
     if (savedData) {

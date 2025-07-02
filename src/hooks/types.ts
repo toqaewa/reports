@@ -1,6 +1,7 @@
 export type TaskData = Record<string, string> & {
   mergedLabels?: string;
   sprintCount?: string;
+  quarter?: string;
 };
 
 export type ChartData = {

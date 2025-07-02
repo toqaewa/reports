@@ -9,6 +9,13 @@
     flex-wrap: wrap;
 }
 
+.grouped-charts-section {
+    margin: 24px;
+    gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .table-section {
     margin: 24px;
     gap: 24px;
