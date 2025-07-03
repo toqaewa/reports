@@ -19,19 +19,25 @@ export const useQuarterStats = (data: TaskData[]) => {
     const uniqueQuarters = new Set(data.map((task) => task["Квартал"]));
     const quarters = Array.from(uniqueQuarters);
 
+    const extractQuarterInfo = (str: string) => {
+      const match = str.match(/(\d{4}) Q(\d)|Q(\d)[^\d]*(\d{2})/i);
+      if (!match) return { year: 9999, quarter: 9999 };
+      
+      return match[1] 
+        ? { 
+            year: parseInt(match[1], 10), 
+            quarter: parseInt(match[2], 10) 
+          }
+        : { 
+            year: 2000 + parseInt(match[4], 10), 
+            quarter: parseInt(match[3], 10) 
+          };
+    };
+
     const sortedQuarters = quarters.sort((a, b) => {
-      const matchA = a.match(/(\d{4}) Q(\d)/i);
-      const matchB = b.match(/(\d{4}) Q(\d)/i);
-
-      if (!matchA) return 1;
-      if (!matchB) return -1;
-
-      const yearA = parseInt(matchA[1], 10);
-      const quarterA = parseInt(matchA[2], 10);
-      const yearB = parseInt(matchB[1], 10);
-      const quarterB = parseInt(matchB[2], 10);
-
-      return yearA - yearB || quarterA - quarterB;
+      const infoA = extractQuarterInfo(a);
+      const infoB = extractQuarterInfo(b);
+      return infoA.year - infoB.year || infoA.quarter - infoB.quarter;
     });
 
     return sortedQuarters.map((quarter) => {
