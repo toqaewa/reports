@@ -75,6 +75,8 @@ export const compressData = (
     console.info(
       `Original estimate: ${originalEstimate}, FE Estimate: ${customEstimate}, Using: ${estimate}`
     );
+
+    originalEstimate != 0 && customEstimate != 0 && console.warn(`В задаче ${task["Issue key"]} проставлены оба эстимейта`);
     
     return {
       Описание: task["Summary"],
