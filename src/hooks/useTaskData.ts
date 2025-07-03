@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { TaskData } from "./types";
 
-import { 
-  mergeTaskLabels, 
-  countSprints, 
-  extractQuarter, 
-  compressData 
+import {
+  mergeTaskLabels,
+  countSprints,
+  // extractQuarter,
+  compressData,
 } from "./taskDataUtils";
 
 const STORAGE_KEY = "quarterlyReportData";
@@ -41,14 +41,20 @@ export const useTaskData = () => {
     const rawData: string[][] = results.data;
     const headers = rawData[0];
 
-    const formattedData = rawData.slice(1).map((row) => {
+    const filteredData = rawData
+      .slice(1)
+      .filter((row) => row.some((cell) => cell.trim() !== ""));
+
+    const formattedData = filteredData.slice(1).map((row) => {
       const task: TaskData = {};
 
       headers.forEach((header, index) => {
+        const value = row[index] || "";
+
         if (header !== "Labels" && header !== "Sprint") {
-          task[header] = row[index];
+          task[header] = value;
         } else {
-          task[`col_${index}`] = row[index];
+          task[`col_${index}`] = value;
         }
       });
 
@@ -81,6 +87,6 @@ export const useTaskData = () => {
     data,
     handleOnDrop,
     clearData,
-    setData
+    setData,
   };
 };
