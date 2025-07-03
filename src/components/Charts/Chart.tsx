@@ -31,14 +31,12 @@ export const Chart: React.FC<ChartProps> = ({ data, name, dataKey }) => {
     if (!quarter) return '#8884d8';
     
     const quarterColors: Record<string, string> = {
-      '2023 Q1': '#8884d8',
-      '2023 Q2': '#82ca9d',
-      '2023 Q3': '#ffc658',
-      '2023 Q4': '#ff8042',
-      '2024 Q1': '#0088FE',
-      '2024 Q2': '#00C49F',
-      '2024 Q3': '#FFBB28',
-      '2024 Q4': '#FF8042',
+      '2024 Q1': '#91C4FA',
+      '2024 Q2': '#91DEAB',
+      '2024 Q3': '#FAABDE',
+      '2024 Q4': '#FAC491',
+      '2025 Q1': '#91DEDE',
+      '2025 Q2': '#8884d8',
     };
     
     return quarterColors[quarter] || '#8884d8';
