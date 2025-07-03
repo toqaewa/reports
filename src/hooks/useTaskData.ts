@@ -41,9 +41,7 @@ export const useTaskData = () => {
     const rawData: string[][] = results.data;
     const headers = rawData[0];
 
-    const filteredData = rawData
-      .slice(1)
-      .filter((row) => row.some((cell) => cell.trim() !== ""));
+    const filteredData = rawData.filter((row) => row.some((cell) => cell.trim() !== ""));
 
     const formattedData = filteredData.slice(1).map((row) => {
       const task: TaskData = {};

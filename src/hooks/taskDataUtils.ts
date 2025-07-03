@@ -75,7 +75,7 @@ export const compressData = (
     console.info(
       `Original estimate: ${originalEstimate}, FE Estimate: ${customEstimate}, Using: ${estimate}`
     );
-
+    
     return {
       Описание: task["Summary"],
       Исполнитель: task["Assignee"],

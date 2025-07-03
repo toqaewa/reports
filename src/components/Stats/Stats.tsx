@@ -28,6 +28,7 @@ export const Stats: React.FC<StatsProps> = ({
     >
       <h4>Команда {teamName}</h4>
       <div className="stats-summary">
+        {/* TODO: сделать склонения */}
         <h3>{count} задач</h3>
         <span className="stats-estimate">{estimate} часов</span>
       </div>
