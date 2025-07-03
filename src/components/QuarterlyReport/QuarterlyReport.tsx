@@ -29,7 +29,7 @@ export const QuarterlyReport: React.FC = () => {
 
   const { teamStats } = useTeamStats(data);
 
-  const { quarterStats, groupedStats } = useQuarterStats(data);
+  const { quarterStats, groupedStats } = useQuarterStats(filteredData);
 
   const { globalFilter, handleSearchChange, handleClearSearch } = useSearch();
 
