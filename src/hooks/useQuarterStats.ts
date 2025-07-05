@@ -22,15 +22,15 @@ export const useQuarterStats = (data: TaskData[]) => {
     const extractQuarterInfo = (str: string) => {
       const match = str.match(/(\d{4}) Q(\d)|Q(\d)[^\d]*(\d{2})/i);
       if (!match) return { year: 9999, quarter: 9999 };
-      
-      return match[1] 
-        ? { 
-            year: parseInt(match[1], 10), 
-            quarter: parseInt(match[2], 10) 
+
+      return match[1]
+        ? {
+            year: parseInt(match[1], 10),
+            quarter: parseInt(match[2], 10),
           }
-        : { 
-            year: 2000 + parseInt(match[4], 10), 
-            quarter: parseInt(match[3], 10) 
+        : {
+            year: 2000 + parseInt(match[4], 10),
+            quarter: parseInt(match[3], 10),
           };
     };
 
@@ -67,7 +67,7 @@ export const useQuarterStats = (data: TaskData[]) => {
       sprintStats: [],
     };
 
-    if (data.length === 0 || quarterStats.length <= 1) {
+    if (data.length === 0) {
       return emptyStats;
     }
 
@@ -85,7 +85,6 @@ export const useQuarterStats = (data: TaskData[]) => {
           target.push({
             ...item,
             quarter,
-            type: `${item.type} (${quarter})`,
           });
         });
       };
