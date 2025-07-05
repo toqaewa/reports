@@ -9,16 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
 import CustomTooltip from "./CustomTooltip";
-
-interface ChartDataItem {
-  type: string;
-  count?: number;
-  estimate?: number;
-  quarter?: string;
-}
+import { ChartDataItem, transformToGroupedData, getQuarterColor } from "./chartUtils";
 
 interface ChartProps {
   data: ChartDataItem[];
@@ -26,54 +19,11 @@ interface ChartProps {
   dataKey: string;
 }
 
+// TODO: вынести отсюда все про квартал, сейчас график умеет только в 1 тип отчета
+
 export const Chart: React.FC<ChartProps> = ({ data, name, dataKey }) => {
-  const getBarColor = (quarter?: string): string => {
-    if (!quarter) return "#8884d8";
 
-    const quarterColors: Record<string, string> = {
-      "2024 Q1": "#91C4FA",
-      "2024 Q2": "#91DEAB",
-      "2024 Q3": "#FAABDE",
-      "2024 Q4": "#FAC491",
-      "2025 Q1": "#91DEDE",
-      "2025 Q2": "#8884d8",
-    };
-
-    return quarterColors[quarter] || "#8884d8";
-  };
-
-  const groupedData = useMemo(() => {
-    const grouped: Record<
-      string,
-      { type: string; quarters: Record<string, number> }
-    > = {};
-
-    data.forEach((item) => {
-      if (!item.type || !item.quarter) return;
-
-      if (!grouped[item.type]) {
-        grouped[item.type] = {
-          type: item.type,
-          quarters: {},
-        };
-      }
-
-      const value = (item[dataKey as keyof ChartDataItem] as number) || 0;
-      grouped[item.type].quarters[item.quarter] = value;
-    });
-
-    return Object.values(grouped);
-  }, [data, dataKey]);
-
-  const quarters = useMemo(() => {
-    const uniqueQuarters = new Set<string>();
-    data.forEach((item) => {
-      if (item.quarter) {
-        uniqueQuarters.add(item.quarter);
-      }
-    });
-    return Array.from(uniqueQuarters).sort();
-  }, [data]);
+  const { groupedData, quarters } = transformToGroupedData(data, dataKey);
 
   return (
     <div className="chart-container">
@@ -98,7 +48,7 @@ export const Chart: React.FC<ChartProps> = ({ data, name, dataKey }) => {
                 key={quarter}
                 dataKey={`quarters.${quarter}`}
                 name={quarter}
-                fill={getBarColor(quarter)}
+                fill={getQuarterColor(quarter)}
                 radius={[4, 4, 0, 0]}
                 activeBar={{ fillOpacity: 0.8 }}
               />
